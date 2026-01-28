@@ -20,14 +20,16 @@ COMPILE_BUTTON.addEventListener("click",compile);
 
 function wipe(){
   for (inp in input_list){
-    inp.innerHTML("");
-    CLEAR_BUTTON.textContent("CLEARED!!")
+    inp.value = "";
+  OUTPUT.value = "";
+  CLEAR_BUTTON.textContent("CLEARED!!")
+    }
 }
 
 function compile(){
   let compile_text = ""
   for (inp in input_list){
-    compile_text += inp.innerHTML
+    compile_text += inp.value
   }
   OUTPUT.innerHTML=compile_text;
   //Copy to clipboard
@@ -37,10 +39,19 @@ function compile(){
   COMPILE_BUTTON.textContent("COMPILED & COPIED!!")
 }
 
-setInterval(save, 60000);
+setInterval(saveData, 60000);
 setInterval(resetButton, 3000);
 
 function resetButton(){
   CLEAR_BUTTON.textContent("Clear");
   COMPILE_BUTTON.textContent("Compile");
+}
+
+function initializeData(){
+  }
+function saveData(){
+  }
+
+
+function loadData(){
 }
