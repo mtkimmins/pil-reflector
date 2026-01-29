@@ -22,7 +22,7 @@ function wipe(){
     inp.value = "";
   }
   OUTPUT.value = "";
-  CLEAR_BUTTON.textContent("CLEARED!!");
+  CLEAR_BUTTON.value("CLEARED!!");
   setTimeout(resetButton, 3000);
 }
 
@@ -38,7 +38,7 @@ function compile(){
   OUTPUT.setSelectionRange(0,99999);
   navigator.clipboard.writeText(compile_text);
   //Visual feedback
-  COMPILE_BUTTON.textContent("COMPILED & COPIED!!");
+  COMPILE_BUTTON.value("COMPILED & COPIED!!");
   setTimeout(resetButton,3000);
 }
 
@@ -84,7 +84,7 @@ function loadData(){
 //  RUNTIME
 /////////////////////////////////////////
 document.addEventListener("DOMContentLoaded", loadData);
-CLEAR_BUTTON.addEventListener("click", wipe());
+CLEAR_BUTTON.addEventListener("click", wipe);
 COMPILE_BUTTON.addEventListener("click",compile);
 
 setInterval(saveData, 60000);
