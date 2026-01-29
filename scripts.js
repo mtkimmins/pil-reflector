@@ -4,6 +4,7 @@ const INPUT3 = document.getElementById("input_3");
 const INPUT4 = document.getElementById("input_4");
 const INPUT5 = document.getElementById("input_5");
 const INPUT6 = document.getElementById("input_6");
+const WORD_COUNT_DISPLAY = document.getElementById("word_count");
 //BUTTONS
 const CLEAR_BUTTON = document.getElementById("clear_button");
 const COMPILE_BUTTON = document.getElementById("compile_button");
@@ -34,6 +35,7 @@ function wipe(){
   localStorage.setItem("i5","");
   localStorage.setItem("i6","");
   localStorage.setItem("out","");
+  updateWordCount();
   CLEAR_BUTTON.textContent = "CLEARED!!";
   setTimeout(resetButton, 3000);
 }
@@ -110,10 +112,19 @@ function loadData(){
   }
 }
 
+function updateWordCount(){
+  let text = INPUT1.value + " " + INPUT2.value + " " + INPUT3.value + " " + INPUT4.value + " " + INPUT5.value + " " + INPUT6.value;
+  let words = text.trim().split(/\s+/);
+  let wordCount = words.length;
+  // console.log("Word Count:", wordCount);
+  WORD_COUNT_DISPLAY.innerText = wordCount;
+}
 
 /////////////////////////////////////////
 //  RUNTIME
 /////////////////////////////////////////
+updateWordCount();
+document.addEventListener("input", updateWordCount);
 document.addEventListener("DOMContentLoaded", loadData);
 CLEAR_BUTTON.addEventListener("click", wipe);
 COMPILE_BUTTON.addEventListener("click",compile);
