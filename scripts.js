@@ -84,7 +84,7 @@ function loadData(){
 //  RUNTIME
 /////////////////////////////////////////
 document.addEventListener("DOMContentLoaded", loadData);
-CLEAR_BUTTON.addEventListener("click", wipe);
+CLEAR_BUTTON.addEventListener("click", wipe());
 COMPILE_BUTTON.addEventListener("click",compile);
 
 setInterval(saveData, 60000);
