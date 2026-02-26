@@ -1,5 +1,244 @@
-textarea {
-  width: 90vw;
-  height: 100px;
-  margin-bottom: 10px;
+
+:root {
+  --bg: #f6f2e8;
+  --bg-accent: #e7f4d9;
+  --surface: #fffdf8;
+  --surface-strong: #14281d;
+  --ink: #162418;
+  --ink-soft: #4a5d50;
+  --line: #d4decf;
+  --primary: #0c7c59;
+  --primary-hover: #0a684b;
+  --secondary: #f5f7f1;
+  --secondary-hover: #e9ede3;
+  --focus: #ffb703;
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: "Avenir Next", "Trebuchet MS", "Segoe UI", sans-serif;
+  color: var(--ink);
+  background:
+    radial-gradient(circle at 5% 8%, #e6f6d4 0, transparent 40%),
+    radial-gradient(circle at 92% 12%, #f8d8bf 0, transparent 30%),
+    linear-gradient(160deg, var(--bg) 10%, var(--bg-accent) 100%);
+}
+
+.app-shell {
+  width: min(980px, 100% - 2rem);
+  margin: 2rem auto 3rem;
+  display: grid;
+  gap: 1.1rem;
+}
+
+.hero,
+.toolbar,
+.question-card,
+.output-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 10px 25px -18px rgb(15 36 24 / 45%);
+}
+
+.hero {
+  padding: 1.5rem;
+}
+
+.eyebrow {
+  margin: 0 0 0.4rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--primary);
+  font-weight: 700;
+}
+
+h1 {
+  margin: 0;
+  font-family: "Rockwell", "Palatino Linotype", serif;
+  font-size: clamp(1.75rem, 4vw, 2.35rem);
+  line-height: 1.12;
+}
+
+.intro,
+.warning {
+  margin: 0.85rem 0 0;
+  max-width: 72ch;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.warning {
+  padding: 0.7rem 0.8rem;
+  border-radius: var(--radius-sm);
+  background: #fff6da;
+  border: 1px solid #f2dd95;
+}
+
+.toolbar {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 0.8rem;
+  align-items: center;
+  padding: 0.8rem;
+}
+
+.btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 0.66rem 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 160ms ease, background-color 160ms ease, box-shadow 160ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+.btn:focus-visible,
+.pil-input:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--primary-hover);
+}
+
+.btn-secondary {
+  background: var(--secondary);
+  color: var(--ink);
+}
+
+.btn-secondary:hover {
+  background: var(--secondary-hover);
+}
+
+.word-meter {
+  justify-self: center;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  color: var(--ink-soft);
+}
+
+.word-label {
+  font-size: 0.9rem;
+}
+
+#word_count {
+  font-size: 1.2rem;
+  color: var(--surface-strong);
+}
+
+.question-grid {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.question-card {
+  padding: 1rem;
+  animation: rise 380ms ease both;
+}
+
+.question-card:nth-child(2) { animation-delay: 40ms; }
+.question-card:nth-child(3) { animation-delay: 80ms; }
+.question-card:nth-child(4) { animation-delay: 120ms; }
+.question-card:nth-child(5) { animation-delay: 160ms; }
+.question-card:nth-child(6) { animation-delay: 200ms; }
+
+.question-card h2 {
+  margin: 0 0 0.45rem;
+  font-size: 1rem;
+}
+
+.question-card label {
+  display: block;
+  margin-bottom: 0.55rem;
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+
+.pil-input {
+  width: 100%;
+  min-height: 120px;
+  resize: vertical;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  padding: 0.75rem 0.85rem;
+  font: inherit;
+  line-height: 1.45;
+}
+
+.output-panel {
+  padding: 1rem;
+}
+
+.output-panel h2 {
+  margin: 0;
+}
+
+.output-panel p {
+  color: var(--ink-soft);
+}
+
+#compiled_body {
+  margin: 0;
+  min-height: 140px;
+  white-space: pre-wrap;
+  font: 500 0.95rem/1.45 "Consolas", "Lucida Console", monospace;
+  color: #e9f6ef;
+  background: var(--surface-strong);
+  border-radius: var(--radius-sm);
+  padding: 0.9rem;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 700px) {
+  .app-shell {
+    width: min(100% - 1rem, 980px);
+    margin-top: 1rem;
+  }
+
+  .toolbar {
+    grid-template-columns: 1fr;
+  }
+
+  .word-meter {
+    justify-self: start;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .pil-input {
+    min-height: 135px;
+  }
 }

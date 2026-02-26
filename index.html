@@ -1,43 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>PIL Reflection Compiler</title>
-    <link rel="stylesheet" type="text/css" href="styles.css">
+    <link rel="stylesheet" type="text/css" href="styles.css" />
+    <script src="scripts.js" defer></script>
   </head>
   <body>
-    <h1>PIL Reflection Compiler</h1>
-    <p>The PIL is to be submitted on CANVAS as a single text block without titles. 
-      It is potentially annoying to write each section separately and copy-paste it all together. 
-      This compiler will provide a space to write your PIL and later compile it into a single chunk of text to copy into CANVAS for submission. 
-      Text is saved locally to each device, so you can write when convenient and not worry about losing progress. <br>
-      ⚠️ CAUTION ⚠️ Data does not save <b>between</b> devices or browsers. I am also not liable for your resulting mark or lost data.
-      The form can be cleared for subsequent PIL reflections.</p>
-    <br>
-    <button id="clear_button">CLEAR</button>
-    <br>
-    <h3>What happened that was surprising, disappointing, exciting, challenging, or impactful?</h3>
-    <textarea id="input_1"></textarea>
-    <br>
-    <h3>What did you say or do that resonated with the patient or yourself? What do you think supported you in your interaction?</h3>
-    <textarea id="input_2"></textarea>
-    <br>
-    <h3>What do you want to try differently next time? What additional learning do you need to do to improve or gain confidence?</h3>
-    <textarea id="input_3"></textarea>
-    <br>
-    <h3>Feedback from your peer (if present)?</h3>
-    <textarea id="input_4"></textarea>
-    <br>
-    <h3>Feedback from the Lab Facilitator (if present)?</h3>
-    <textarea id="input_5"></textarea>
-    <br>
-    <h3>Brief notes: Write some initial thoughts, behaviours, perspectives, or goals that you would want to explore on a deeper level.</h3>
-    <textarea id="input_6"></textarea>
-    <h4>Word Count: <span id="word_count">0</span></h4>
-    <br>
-    <button id="compile_button">COMPILE & COPY</button>
-    <br>
-    <h4>Your compiled note will appear below. It will also be copied directly to your clipboard!.</h4>
-    <p id="compiled_body">...</p>
+    <main class="app-shell">
+      <header class="hero">
+        <p class="eyebrow">Clinical Reflection Workspace</p>
+        <h1>PIL Reflection Compiler</h1>
+        <p class="intro">
+          Draft each section below, then compile everything into one plain text block for Canvas submission.
+          Your content is saved locally in this browser.
+        </p>
+        <p class="warning">
+          Local storage is device- and browser-specific. Keep your own backup for safety.
+        </p>
+      </header>
+
+      <section class="toolbar" aria-label="Actions and progress">
+        <button id="clear_button" class="btn btn-secondary" type="button">Clear Form</button>
+        <div class="word-meter">
+          <span class="word-label">Word Count</span>
+          <strong id="word_count">0</strong>
+        </div>
+        <button id="compile_button" class="btn btn-primary" type="button">Compile and Copy</button>
+      </section>
+
+      <section class="question-grid" aria-label="Reflection prompts">
+        <article class="question-card">
+          <h2>1. Key event</h2>
+          <label for="input_1">What happened that was surprising, disappointing, exciting, challenging, or impactful?</label>
+          <textarea id="input_1" class="pil-input" placeholder="Write your reflection..."></textarea>
+        </article>
+
+        <article class="question-card">
+          <h2>2. Interaction insight</h2>
+          <label for="input_2">What did you say or do that resonated with the patient or yourself? What supported you in that interaction?</label>
+          <textarea id="input_2" class="pil-input" placeholder="Write your reflection..."></textarea>
+        </article>
+
+        <article class="question-card">
+          <h2>3. Next attempt</h2>
+          <label for="input_3">What do you want to try differently next time? What additional learning do you need?</label>
+          <textarea id="input_3" class="pil-input" placeholder="Write your reflection..."></textarea>
+        </article>
+
+        <article class="question-card">
+          <h2>4. Peer feedback</h2>
+          <label for="input_4">Feedback from your peer (if present)</label>
+          <textarea id="input_4" class="pil-input" placeholder="Optional"></textarea>
+        </article>
+
+        <article class="question-card">
+          <h2>5. Facilitator feedback</h2>
+          <label for="input_5">Feedback from the Lab Facilitator (if present)</label>
+          <textarea id="input_5" class="pil-input" placeholder="Optional"></textarea>
+        </article>
+
+        <article class="question-card">
+          <h2>6. Brief notes</h2>
+          <label for="input_6">Initial thoughts, behaviours, perspectives, or goals you want to explore more deeply.</label>
+          <textarea id="input_6" class="pil-input" placeholder="Write your reflection..."></textarea>
+        </article>
+      </section>
+
+      <section class="output-panel" aria-live="polite">
+        <h2>Compiled Output</h2>
+        <p>When you compile, your full reflection appears here and is copied to your clipboard.</p>
+        <pre id="compiled_body">...</pre>
+      </section>
+    </main>
   </body>
-  <script src="scripts.js" defer></script>
 </html>

@@ -1,133 +1,115 @@
-const INPUT1 = document.getElementById("input_1");
-const INPUT2 = document.getElementById("input_2");
-const INPUT3 = document.getElementById("input_3");
-const INPUT4 = document.getElementById("input_4");
-const INPUT5 = document.getElementById("input_5");
-const INPUT6 = document.getElementById("input_6");
+const INPUT_IDS = ["input_1", "input_2", "input_3", "input_4", "input_5", "input_6"];
+const INPUTS = INPUT_IDS.map((id) => document.getElementById(id));
 const WORD_COUNT_DISPLAY = document.getElementById("word_count");
-//BUTTONS
 const CLEAR_BUTTON = document.getElementById("clear_button");
 const COMPILE_BUTTON = document.getElementById("compile_button");
-
-//OUTPUT FIELD
 const OUTPUT = document.getElementById("compiled_body");
 
+const STORAGE_KEYS = {
+  output: "out",
+  inputs: {
+    input_1: "i1",
+    input_2: "i2",
+    input_3: "i3",
+    input_4: "i4",
+    input_5: "i5",
+    input_6: "i6",
+  },
+};
 
-
-/////////////////////////////////////
-//  CLASSES/FUNCTIONS
-/////////////////////////////////////
-function wipe(){
-  // console.log("input1:", INPUT1.value);
-  INPUT1.value = "";
-  INPUT2.value = "";
-  INPUT3.value = "";
-  INPUT4.value = "";
-  INPUT5.value = "";
-  INPUT6.value = "";
-  OUTPUT.innerText = "";
-
-  //Memory clear
-  localStorage.setItem("i1","");
-  localStorage.setItem("i2","");
-  localStorage.setItem("i3","");
-  localStorage.setItem("i4","");
-  localStorage.setItem("i5","");
-  localStorage.setItem("i6","");
-  localStorage.setItem("out","");
-  updateWordCount();
-  CLEAR_BUTTON.textContent = "CLEARED!!";
-  setTimeout(resetButton, 3000);
+function setButtonFeedback(button, message, resetText) {
+  button.textContent = message;
+  setTimeout(() => {
+    button.textContent = resetText;
+  }, 2200);
 }
 
-function compile(){
-  document.getElementById("compiled_body").innerText = "...";
-  let compile_text = ""
-  // console.log("input1 value:",INPUT1.value);
-  compile_text = compile_text.concat(INPUT1.value, "\n");
-  compile_text = compile_text.concat(INPUT2.value, "\n");
-  compile_text = compile_text.concat(INPUT3.value, "\n");
-  compile_text = compile_text.concat(INPUT4.value, "\n");
-  compile_text = compile_text.concat(INPUT5.value, "\n");
-  compile_text = compile_text.concat(INPUT6.value, "\n");
-  console.log("Compiled Text:", compile_text);
+function clearForm() {
+  INPUTS.forEach((input) => {
+    input.value = "";
+  });
 
-  document.getElementById("compiled_body").innerText = compile_text;
+  OUTPUT.innerText = "...";
   saveData();
-  //Copy to clipboard
-  copyStringToClipboard(compile_text);
-  //Visual feedback
-  COMPILE_BUTTON.textContent = "COMPILED & COPIED!!";
-  setTimeout(resetButton,3000);
+  updateWordCount();
+  setButtonFeedback(CLEAR_BUTTON, "Cleared", "Clear Form");
 }
 
-function copyStringToClipboard(textToCopy) {
-  navigator.clipboard.writeText(textToCopy)
-    .then(() => {
-      console.log("Text successfully copied to clipboard");
-      // Optional: Provide user feedback (e.g., a toast notification or alert)
-    })
-    .catch(err => {
-      console.error("Failed to copy text: ", err);
-      // Optional: Handle the error gracefully
-    });
+function buildCompiledText() {
+  return INPUTS.map((input) => input.value.trim()).join("\n");
 }
 
-function resetButton(){
-  CLEAR_BUTTON.textContent = "CLEAR";
-  COMPILE_BUTTON.textContent = "COMPILE & COPY";
-}
-
-function saveData(){
-  localStorage.setItem("i1",document.getElementById("input_1").value);
-  localStorage.setItem("i2",document.getElementById("input_2").value);
-  localStorage.setItem("i3",document.getElementById("input_3").value);
-  localStorage.setItem("i4",document.getElementById("input_4").value);
-  localStorage.setItem("i5",document.getElementById("input_5").value);
-  localStorage.setItem("i6",document.getElementById("input_6").value);
-  localStorage.setItem("out",document.getElementById("compiled_body").innerText);
-}
-
-function loadData(){
-  if (localStorage.getItem("i1") != null){
-    document.getElementById("input_1").value = localStorage.getItem("i1");
-  }
-  if (localStorage.getItem("i2") != null){
-    document.getElementById("input_2").value = localStorage.getItem("i2");
-  }
-  if (localStorage.getItem("i3") != null){
-    document.getElementById("input_3").value = localStorage.getItem("i3");
-  }
-  if (localStorage.getItem("i4") != null){
-    document.getElementById("input_4").value = localStorage.getItem("i4");
-  }
-  if (localStorage.getItem("i5") != null){
-    document.getElementById("input_5").value = localStorage.getItem("i5");
-  }
-  if (localStorage.getItem("i6") != null){
-    document.getElementById("input_6").value = localStorage.getItem("i6");
-  }
-  if (localStorage.getItem("out") != null){
-    document.getElementById("compiled_body").innerText = localStorage.getItem("out");
+async function copyStringToClipboard(textToCopy) {
+  try {
+    await navigator.clipboard.writeText(textToCopy);
+    return true;
+  } catch (err) {
+    const hiddenInput = document.createElement("textarea");
+    hiddenInput.value = textToCopy;
+    hiddenInput.setAttribute("readonly", "");
+    hiddenInput.style.position = "absolute";
+    hiddenInput.style.left = "-9999px";
+    document.body.appendChild(hiddenInput);
+    hiddenInput.select();
+    const copied = document.execCommand("copy");
+    document.body.removeChild(hiddenInput);
+    return copied;
   }
 }
 
-function updateWordCount(){
-  let text = INPUT1.value + " " + INPUT2.value + " " + INPUT3.value + " " + INPUT4.value + " " + INPUT5.value + " " + INPUT6.value;
-  let words = text.trim().split(/\s+/);
-  let wordCount = words.length;
-  // console.log("Word Count:", wordCount);
+async function compile() {
+  const compiledText = buildCompiledText();
+  OUTPUT.innerText = compiledText || "...";
+  saveData();
+
+  const copied = await copyStringToClipboard(compiledText);
+  if (copied) {
+    setButtonFeedback(COMPILE_BUTTON, "Compiled and Copied", "Compile and Copy");
+  } else {
+    setButtonFeedback(COMPILE_BUTTON, "Compiled (copy failed)", "Compile and Copy");
+  }
+}
+
+function saveData() {
+  INPUT_IDS.forEach((id) => {
+    const key = STORAGE_KEYS.inputs[id];
+    localStorage.setItem(key, document.getElementById(id).value);
+  });
+  localStorage.setItem(STORAGE_KEYS.output, OUTPUT.innerText);
+}
+
+function loadData() {
+  INPUT_IDS.forEach((id) => {
+    const key = STORAGE_KEYS.inputs[id];
+    const value = localStorage.getItem(key);
+    if (value !== null) {
+      document.getElementById(id).value = value;
+    }
+  });
+
+  const output = localStorage.getItem(STORAGE_KEYS.output);
+  if (output !== null && output !== "") {
+    OUTPUT.innerText = output;
+  }
+}
+
+function updateWordCount() {
+  const text = INPUTS.map((input) => input.value).join(" ").trim();
+  const wordCount = text === "" ? 0 : text.split(/\s+/).length;
   WORD_COUNT_DISPLAY.innerText = wordCount;
 }
 
-/////////////////////////////////////////
-//  RUNTIME
-/////////////////////////////////////////
-updateWordCount();
-document.addEventListener("input", updateWordCount);
-document.addEventListener("DOMContentLoaded", loadData);
-CLEAR_BUTTON.addEventListener("click", wipe);
-COMPILE_BUTTON.addEventListener("click",compile);
+document.addEventListener("DOMContentLoaded", () => {
+  loadData();
+  updateWordCount();
+});
+
+document.addEventListener("input", () => {
+  updateWordCount();
+  saveData();
+});
+
+CLEAR_BUTTON.addEventListener("click", clearForm);
+COMPILE_BUTTON.addEventListener("click", compile);
 
 setInterval(saveData, 60000);
-// setInterval(resetButton, 3000);
